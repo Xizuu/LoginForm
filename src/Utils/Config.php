@@ -33,7 +33,7 @@ class Config
 
         $content = file_get_contents($this->file);
         $config = match ($this->type) {
-            self::JSON => json_decode($content, true),
+            self::JSON => json_decode($content, true, JSON_THROW_ON_ERROR),
             self::YAML => Yaml::parse($content),
             default => throw new \Exception("Invalid config type specified"),
         };

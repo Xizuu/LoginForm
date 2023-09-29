@@ -15,25 +15,37 @@ if (!SessionFactory::hasStarted("username")) {
             $rpassword = $_POST["rpassword"];
 
             if ($password == $rpassword) {
+                if (strlen($password) < 6) {
+                    echo "<script>alert('Password harus berisikan minimal 6 karakter!');</script>";
+                    echo "<script>window.location = '/register';</script>";
+                    exit;
+                }
+                if (!is_numeric($phone)) {
+                    echo "<script>alert('Phone harus berisikan angka!');</script>";
+                    echo "<script>window.location = '/register';</script>";
+                    exit;
+                }
                 $mysql = new Mysql($config->get("MYSQL_HOST") ?? "localhost", $config->get("MYSQL_USER") ?? "root", $config->get("MYSQL_PASSWORD") ?? "", $config->get("MYSQL_DATABASE"));
-                $rowAll = $mysql->executeQuery("SELECT * FROM users WHERE username = '$username' AND email = '$email'");
-                $rowCount = $rowAll->rowCount();
+                $rowAll = $mysql->executeQuery("SELECT * FROM users WHERE username = :username OR email = :email", [
+                    ":username" => $username,
+                    ":email" => $email
+                ]);
 
-                if ($rowCount == 0) {
-                    $mysql->executeQuery("INSERT INTO users (username, email, phone, password) VALUES (:username, :email, :phone, :password);", [
+                if ($rowAll->rowCount() == 0) {
+                    $mysql->executeQuery("INSERT INTO users (username, email, phone, password) VALUES (:username, :email, :phone, :password)", [
                         ":username" => $username,
                         ":email" => $email,
                         ":phone" => $phone,
-                        ":password" => sha1($password),
+                        ":password" => md5($password)
                     ]);
-                    echo "<script>alert('Berhasil mendaftar');</script>";
+                    echo "<script>alert('Berhasil mendaftar!');</script>";
                     echo "<script>window.location = '/login';</script>";
                 } else {
-                    echo "<script>alert('Username atau email telah digunakan');</script>";
+                    echo "<script>alert('Username atau email telah digunakan!');</script>";
                     echo "<script>window.location = '/register';</script>";
                 }
             } else {
-                echo "<script>alert('Password tidak sesuai');</script>";
+                echo "<script>alert('Password tidak sesuai!');</script>";
                 echo "<script>window.location = '/register';</script>";
             }
         }

@@ -11,18 +11,23 @@ if (!SessionFactory::hasStarted("username")) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST["login"])) {
             $username = $_POST["username"];
-            $password = sha1($_POST["password"]);
+            $password = md5($_POST["password"]);
 
             $mysql = new Mysql($config->get("MYSQL_HOST") ?? "localhost", $config->get("MYSQL_USER") ?? "root", $config->get("MYSQL_PASSWORD") ?? "", $config->get("MYSQL_DATABASE"));
-            $rowAll = $mysql->executeQuery("SELECT * FROM users WHERE username = :username AND password = :password", [
-                ":username" => $username,
-                ":password" => $password
+            $rowAll = $mysql->executeQuery("SELECT * FROM users WHERE username = :username", [
+                ":username" => $username
             ]);
             $rowCount = $rowAll->rowCount();
-            if ($rowCount !== 0) {
-                SessionFactory::set("username", $username);
-                echo "<script>alert('Berhasil login');</script>";
-                echo "<script>window.location = '/';</script>";
+            if ($rowCount > 0) {
+                $row = $rowAll->fetch(\PDO::FETCH_ASSOC);
+                if ($password == $row["password"]) {
+                    SessionFactory::set("username", $username);
+                    echo "<script>alert('Berhasil login');</script>";
+                    echo "<script>window.location = '/';</script>";
+                } else {
+                    echo "<script>alert('Password salah');</script>";
+                    echo "<script>window.location = '/login';</script>";
+                }
             } else {
                 echo "<script>alert('Username atau password salah');</script>";
                 echo "<script>window.location = '/login';</script>";
