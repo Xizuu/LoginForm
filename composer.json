@@ -1,0 +1,13 @@
+{
+    "name": "raihannih/login-page",
+    "autoload": {
+        "psr-4": {
+            "RaihanNih\\": "src/"
+        }
+    },
+    "require": {
+        "steampixel/simple-php-router": "^0.7.1",
+        "symfony/yaml": "^6.3",
+        "ext-pdo": "*"
+    }
+}
