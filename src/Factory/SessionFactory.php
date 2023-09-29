@@ -17,9 +17,9 @@ class SessionFactory
         $_SESSION[$sessionName] = $sessionValue;
     }
 
-    public static function get(string $sessionName): string
+    public static function get(string $sessionName): ?string
     {
-        return $_SESSION[$sessionName];
+        return $_SESSION[$sessionName] ?? null;
     }
 
     public static function destroy(string $sessionName): void

@@ -7,29 +7,44 @@ use Symfony\Component\Yaml\Yaml;
 class Config
 {
 
-    public const YAML = 0;
-    public const JSON = 1;
+    public const YAML = 0; // .yaml, .yml files
+    public const JSON = 1; // .json files
 
-    /** @var string $fileName */
-    private string $fileName;
-    /** @var string $fileType */
-    private string $fileType;
+    /** @var string $file */
+    private string $file;
+    /** @var int $type */
+    private int $type = self::YAML;
+    /** @var array $config */
+    private array $config = [];
 
-    public function __construct(string $fileName, string $fileType = self::YAML)
+    public function __construct(string $file, int $type = self::YAML)
     {
-        $this->fileName = file_get_contents($fileName);
-        $this->fileType = $fileType;
+        $this->load($file, $type);
+    }
+
+    /**
+     * @param string $file
+     * @param int $type
+     */
+    private function load(string $file, int $type = self::YAML): void
+    {
+        $this->file = $file;
+        $this->type = $type;
+
+        $content = file_get_contents($this->file);
+        $config = match ($this->type) {
+            self::JSON => json_decode($content, true),
+            self::YAML => Yaml::parse($content),
+            default => throw new \Exception("Invalid config type specified"),
+        };
+        if(!is_array($config)){
+            throw new \Exception("Failed to load config $this->file: Expected array for base type, but got " . get_debug_type($config));
+        }
+        $this->config = $config;
     }
 
     public function get(string $k): mixed
     {
-        if ($this->fileType == self::YAML) {
-            $value = Yaml::parse($this->fileName);
-            return $value[$k];
-        }
-        if ($this->fileType == self::JSON) {
-            $value = json_decode($this->fileName, true);
-            return $value[$k];
-        }
+        return $this->config[$k] ?? false;
     }
 }

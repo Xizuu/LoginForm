@@ -167,7 +167,8 @@ if (!SessionFactory::hasStarted("username")) {
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="form-container" <h5 class="mb-4">Register</h5>
+                <div class="form-container">
+                    <h5 class="mb-4">Register</h5>
                     <form class="login-form" method="post">
                         <div class="form-group">
                             <label for="username">Username</label>
