@@ -44,22 +44,3 @@ class Mysql
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 }
-
-// $host = 'localhost';
-// $username = 'username_db';
-// $password = 'password_db';
-// $database = 'nama_database';
-
-// $db = new Database($host, $username, $password, $database);
-
-// $sql = "SELECT * FROM users";
-// $users = $db->fetchAll($sql);
-
-// foreach ($users as $user) {
-//     echo "ID: " . $user['id'] . ", Nama: " . $user['nama'] . "<br>";
-// }
-
-// $insertSql = "INSERT INTO users (nama, email) VALUES (:nama, :email)";
-// $insertParams = [':nama' => 'John Doe', ':email' => 'john@example.com'];
-// $db->executeQuery($insertSql, $insertParams);
-// echo "Data baru telah dimasukkan ke dalam database.<br>";
