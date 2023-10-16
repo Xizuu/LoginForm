@@ -37,7 +37,7 @@ class Config
             self::YAML => Yaml::parse($content),
             default => throw new \Exception("Invalid config type specified"),
         };
-        if(!is_array($config)){
+        if (!is_array($config)) {
             throw new \Exception("Failed to load config $this->file: Expected array for base type, but got " . get_debug_type($config));
         }
         $this->config = $config;

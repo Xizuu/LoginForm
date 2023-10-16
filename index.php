@@ -13,4 +13,7 @@ Route::add("/login", fn () => include_once ROOT . "/Views/Login.views.php", ["po
 Route::add("/register", fn () => include_once ROOT . "/Views/Register.views.php", ["post", "get"]);
 Route::add("/logout", fn () => include_once ROOT . "/Logout.php");
 
+Route::add("/controller/login", fn () => include_once ROOT . "/Controller/LoginController.php", ["post", "get"]);
+Route::add("/controller/register", fn () => include_once ROOT . "/Controller/RegisterController.php", ["post", "get"]);
+
 Route::run(BASEPATH);
