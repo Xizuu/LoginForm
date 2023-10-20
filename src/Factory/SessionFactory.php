@@ -12,19 +12,19 @@ class SessionFactory
         }
     }
 
-    public static function set(string $sessionName, string $sessionValue): void
+    public static function set(string $k, string $v): void
     {
-        $_SESSION[$sessionName] = $sessionValue;
+        $_SESSION[$k] = $v;
     }
 
-    public static function get(string $sessionName): ?string
+    public static function get(string $k): ?string
     {
-        return $_SESSION[$sessionName] ?? null;
+        return $_SESSION[$k] ?? null;
     }
 
-    public static function destroy(string $sessionName): void
+    public static function destroy(string $k): void
     {
-        unset($_SESSION[$sessionName]);
+        unset($_SESSION[$k]);
     }
 
     public static function destroyAll(): bool
@@ -32,8 +32,8 @@ class SessionFactory
         return session_destroy();
     }
 
-    public static function hasStarted(string $sessionName): bool
+    public static function hasStarted(string $k): bool
     {
-        return isset($_SESSION[$sessionName]);
+        return isset($_SESSION[$k]);
     }
 }
